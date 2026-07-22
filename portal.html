@@ -492,6 +492,7 @@
         <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
         <input type="search" id="searchBox" />
       </div>
+      <button class="btn btn--primary" id="addResultBtn" type="button">+ Add result</button>
     </div>
     <div id="candList"></div>
     </div><!-- /view-assess -->
@@ -633,6 +634,44 @@
   </div>
 </div>
 
+<!-- Add assessment result modal -->
+<div class="modal" id="asModal" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2>Add assessment result</h2>
+      <div class="spacer"></div>
+      <button class="modal-x" id="asClose" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="frow">
+        <label for="asPaste">Paste the candidate&rsquo;s downloaded result file to auto-fill <span style="color:var(--faint);font-weight:400">(optional)</span></label>
+        <textarea id="asPaste"></textarea>
+        <button class="link-btn" id="asFill" type="button" style="margin-top:8px">Auto-fill from paste</button>
+      </div>
+      <div class="frow"><label for="asName">Full name <span class="req">*</span></label><input type="text" id="asName"></div>
+      <div class="fcols">
+        <div class="frow"><label for="asPos">Position</label><input type="text" id="asPos"></div>
+        <div class="frow"><label for="asDate">Test date</label><input type="date" id="asDate"></div>
+      </div>
+      <div class="fcols">
+        <div class="frow"><label for="asPhone">Phone</label><input type="tel" id="asPhone"></div>
+        <div class="frow"><label for="asEmail">Email</label><input type="email" id="asEmail"></div>
+      </div>
+      <div class="fcols">
+        <div class="frow"><label for="asWpm">Speed (WPM) <span class="req">*</span></label><input type="text" id="asWpm"></div>
+        <div class="frow"><label for="asAcc">Accuracy (%) <span class="req">*</span></label><input type="text" id="asAcc"></div>
+      </div>
+      <div class="frow"><label for="asTime">Time taken</label><input type="text" id="asTime"></div>
+      <div class="frow"><label for="asBg">Background</label><textarea id="asBg"></textarea></div>
+      <div class="frow"><label for="asFit">Why they&rsquo;re the best fit</label><textarea id="asFit"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn--ghost" id="asCancel" type="button">Cancel</button>
+      <button class="btn btn--primary" id="asSave" type="button">Save result</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
   "use strict";
@@ -712,6 +751,69 @@
       email: email || "Not provided", wpm: wpm, accuracy: accuracy, total: total, bg: bg, fit: fit };
   }
 
+  /* Assessment results are stored in this browser; seeded from the demo on first run. */
+  var ASSESS_KEY = "bds_assessments_v1";
+  function loadAssessments() {
+    try { var s = JSON.parse(localStorage.getItem(ASSESS_KEY) || "null"); if (s) return s; } catch (e) {}
+    return CANDIDATES.map(function (c, i) { var o = {}; for (var k in c) o[k] = c[k]; o.id = o.id || ("seed" + i); return o; });
+  }
+  function saveAssessments(list) { try { localStorage.setItem(ASSESS_KEY, JSON.stringify(list)); } catch (e) {} }
+
+  function openAsModal() {
+    ["asName","asPos","asPhone","asEmail","asWpm","asAcc","asTime","asBg","asFit","asPaste"].forEach(function(k){ document.getElementById(k).value = ""; });
+    document.getElementById("asName").style.borderColor = "";
+    document.getElementById("asDate").value = isoInDays(0);
+    document.getElementById("asModal").hidden = false;
+    document.getElementById("asName").focus();
+  }
+  function closeAsModal() { document.getElementById("asModal").hidden = true; }
+  function parseFullResult(text) {
+    function m(re){ var x = text.match(re); return x ? x[1].trim() : ""; }
+    function section(startRe, endRe) {
+      var s = text.search(startRe); if (s < 0) return "";
+      var chunk = text.slice(s);
+      if (endRe) { var e = chunk.slice(1).search(endRe); if (e >= 0) chunk = chunk.slice(0, e + 1); }
+      var lines = chunk.split(/\r?\n/); lines.shift();
+      lines = lines.filter(function(l){ return !/^\s*(Started|Ended|Time taken)\s*:/i.test(l); });
+      return lines.join("\n").trim();
+    }
+    return {
+      name: m(/Name\s*:\s*(.+)/i), position: m(/Position\s*:\s*(.+)/i),
+      phone: m(/Phone\s*:\s*(.+)/i), email: m(/Email\s*:\s*(.+)/i),
+      wpm: m(/Speed\s*:\s*([0-9]+)/i), accuracy: m(/Accuracy\s*:\s*([0-9]+)/i),
+      total: (text.match(/SECTION 1[\s\S]*?Time taken\s*:\s*(.+)/i) || [])[1] || "",
+      bg: section(/SECTION 2[^\n]*/i, /SECTION 3/i), fit: section(/SECTION 3[^\n]*/i, null)
+    };
+  }
+  function asFillFromPaste() {
+    var t = document.getElementById("asPaste").value.trim();
+    if (!t) { toast("Paste the result text first"); return; }
+    var p = parseFullResult(t);
+    function setIf(id,v){ if (v) document.getElementById(id).value = v; }
+    setIf("asName", p.name); setIf("asPos", p.position); setIf("asWpm", p.wpm); setIf("asAcc", p.accuracy);
+    setIf("asTime", p.total); setIf("asBg", p.bg); setIf("asFit", p.fit);
+    if (p.phone && !/not provided/i.test(p.phone)) document.getElementById("asPhone").value = p.phone;
+    if (p.email && !/not provided/i.test(p.email)) document.getElementById("asEmail").value = p.email;
+    toast((p.name || p.wpm) ? "Filled from the pasted result" : "Could not read that text");
+  }
+  function saveAsResult() {
+    var name = document.getElementById("asName").value.trim();
+    var wpm = parseInt(document.getElementById("asWpm").value, 10);
+    var acc = parseInt(document.getElementById("asAcc").value, 10);
+    if (!name) { var n = document.getElementById("asName"); n.focus(); n.style.borderColor = "var(--bad)"; return; }
+    if (isNaN(wpm) || isNaN(acc)) { toast("Enter the WPM and accuracy"); return; }
+    var rec = { id: "as" + Date.now(), date: document.getElementById("asDate").value || isoInDays(0),
+      name: name, position: document.getElementById("asPos").value.trim(),
+      phone: document.getElementById("asPhone").value.trim() || "Not provided",
+      email: document.getElementById("asEmail").value.trim() || "Not provided",
+      wpm: wpm, accuracy: acc, total: document.getElementById("asTime").value.trim() || "",
+      bg: document.getElementById("asBg").value.trim(), fit: document.getElementById("asFit").value.trim() };
+    var list = loadAssessments(); list.unshift(rec); saveAssessments(list);
+    closeAsModal(); renderDashboard();
+    if (!document.getElementById("view-analytics").hidden) renderAnalytics();
+    toast("Assessment result added");
+  }
+
   /* ---------------- Login ---------------- */
   var CREDS = { user: "admin", pass: "bds2026" };
   var loginView = document.getElementById("loginView");
@@ -767,15 +869,23 @@
 
   /* ---------------- Dashboard render ---------------- */
   function renderDashboard() {
+    var CAND = loadAssessments();
+    if (!CAND.length) {
+      document.getElementById("kpis").innerHTML = "";
+      document.getElementById("chartBar").innerHTML = "";
+      document.getElementById("chartLine").innerHTML = "";
+      document.getElementById("candList").innerHTML = '<div class="empty">No assessment results yet. Click <b>+ Add result</b> to enter a candidate&rsquo;s test.</div>';
+      return;
+    }
     // group by date, newest first
     var byDate = {};
-    CANDIDATES.forEach(function (c) { (byDate[c.date] = byDate[c.date] || []).push(c); });
+    CAND.forEach(function (c) { (byDate[c.date] = byDate[c.date] || []).push(c); });
     var dates = Object.keys(byDate).sort().reverse(); // desc for the list
 
     // KPIs
-    var total = CANDIDATES.length;
-    var avgWpm = Math.round(CANDIDATES.reduce(function (s, c) { return s + c.wpm; }, 0) / total);
-    var avgAcc = Math.round(CANDIDATES.reduce(function (s, c) { return s + c.accuracy; }, 0) / total);
+    var total = CAND.length;
+    var avgWpm = Math.round(CAND.reduce(function (s, c) { return s + c.wpm; }, 0) / total);
+    var avgAcc = Math.round(CAND.reduce(function (s, c) { return s + c.accuracy; }, 0) / total);
     var latest = dates[0];
     var kpis = [
       { k: "Total candidates", v: total, foot: "across " + dates.length + " test days" },
@@ -827,17 +937,26 @@
     host.querySelectorAll(".crow-main").forEach(function (m) {
       m.addEventListener("click", function () { m.parentNode.classList.toggle("open"); });
     });
-    host.querySelectorAll("[data-dl]").forEach(function (b) {
+    host.querySelectorAll("[data-dlid]").forEach(function (b) {
       b.addEventListener("click", function (e) {
         e.stopPropagation();
-        downloadCandidate(CANDIDATES[+b.getAttribute("data-dl")]);
+        var c = loadAssessments().filter(function (x) { return x.id === b.getAttribute("data-dlid"); })[0];
+        if (c) downloadCandidate(c);
+      });
+    });
+    host.querySelectorAll("[data-delid]").forEach(function (b) {
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (!window.confirm("Delete this assessment result?")) return;
+        saveAssessments(loadAssessments().filter(function (x) { return x.id !== b.getAttribute("data-delid"); }));
+        renderDashboard();
+        if (!document.getElementById("view-analytics").hidden) renderAnalytics();
       });
     });
   }
 
   function rowHtml(c) {
-    var idx = CANDIDATES.indexOf(c);
-    return '<div class="crow"><div class="crow-main">' +
+    return '<div class="crow" data-cid="' + c.id + '"><div class="crow-main">' +
       '<div><div class="cand-name">' + esc(c.name) + '</div><div class="cand-sub">' + esc(c.phone) + '</div></div>' +
       '<div class="col-pos">' + esc(c.position) + '</div>' +
       '<div class="chip ' + speedClass(c.wpm) + ' tnum">' + c.wpm + ' WPM</div>' +
@@ -853,7 +972,7 @@
         '</div>' +
         '<div class="ans"><h4>Background</h4><p>' + esc(c.bg) + '</p></div>' +
         '<div class="ans"><h4>Why they&rsquo;re the best fit</h4><p>' + esc(c.fit) + '</p></div>' +
-        '<div class="detail-actions"><button class="btn btn--ghost sm" data-dl="' + idx + '">Download results</button></div>' +
+        '<div class="detail-actions"><button class="btn btn--ghost sm" data-dlid="' + c.id + '">Download results</button><button class="btn btn--danger sm" data-delid="' + c.id + '">Delete</button></div>' +
       '</div></div>';
   }
   function dkv(l, v) { return '<div class="dkv"><div class="lbl">' + l + '</div><div class="val">' + v + '</div></div>'; }
@@ -1077,6 +1196,13 @@
     document.getElementById("empSearch").addEventListener("input", renderEmployees);
     document.getElementById("apExport").addEventListener("click", exportApplicants);
     document.getElementById("empExport").addEventListener("click", exportEmployees);
+    // add assessment result
+    document.getElementById("addResultBtn").addEventListener("click", openAsModal);
+    document.getElementById("asClose").addEventListener("click", closeAsModal);
+    document.getElementById("asCancel").addEventListener("click", closeAsModal);
+    document.getElementById("asModal").addEventListener("click", function(e){ if (e.target === this) closeAsModal(); });
+    document.getElementById("asFill").addEventListener("click", asFillFromPaste);
+    document.getElementById("asSave").addEventListener("click", saveAsResult);
 
     // modal
     document.getElementById("apModalClose").addEventListener("click", closeModal);
@@ -1298,11 +1424,11 @@
   function renderTyping() {
     var thWpm = parseInt(document.getElementById("thWpm").value,10) || 0;
     var thAcc = parseInt(document.getElementById("thAcc").value,10) || 0;
-    var data = CANDIDATES, total = data.length;
+    var data = loadAssessments(), total = data.length;
     var passed = data.filter(function(c){ return c.wpm >= thWpm && c.accuracy >= thAcc; }).length;
     var pct = total ? Math.round(passed/total*100) : 0;
-    var avgW = Math.round(data.reduce(function(s,c){ return s+c.wpm; },0)/total);
-    var avgA = Math.round(data.reduce(function(s,c){ return s+c.accuracy; },0)/total);
+    var avgW = total ? Math.round(data.reduce(function(s,c){ return s+c.wpm; },0)/total) : 0;
+    var avgA = total ? Math.round(data.reduce(function(s,c){ return s+c.accuracy; },0)/total) : 0;
     function tile(k,v,u,f){ return '<div class="kpi"><div class="k">'+k+'</div><div class="v tnum">'+v+(u?'<small>'+u+'</small>':'')+'</div><div class="foot">'+f+'</div></div>'; }
     document.getElementById("anPass").innerHTML =
       tile("Pass rate", pct, "%", passed+" of "+total+" candidates") +
