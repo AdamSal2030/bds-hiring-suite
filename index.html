@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BDS Corp — Hiring Suite</title>
+<style>
+  :root{
+    --ground:#0a1030; --paper:#121c46; --ink:#ffffff; --muted:#c7d1e4;
+    --accent:#a8d93f; --accent-ink:#0a1030; --line:#26346c;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,ui-serif,serif;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:var(--sans);color:var(--ink);
+    background:radial-gradient(1100px 480px at 50% -10%,#101a44,transparent 60%),var(--ground);
+    display:grid;place-items:center;padding:32px}
+  .wrap{width:100%;max-width:760px}
+  .mark{width:56px;height:56px;display:block;margin-bottom:18px}
+  .mark rect,.mark path{fill:none;stroke:var(--accent)}
+  h1{font-family:var(--serif);font-size:2rem;margin:0 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0 0 28px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:560px){.cards{grid-template-columns:1fr}}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--paper);
+    border:1px solid var(--line);border-radius:14px;padding:22px;transition:border-color .15s,transform .08s}
+  a.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  a.card h2{font-family:var(--serif);font-size:1.2rem;margin:0 0 6px}
+  a.card p{color:var(--muted);font-size:.9rem;margin:0 0 14px}
+  .go{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:700;
+    font-size:.85rem;padding:8px 14px;border-radius:9px}
+  .note{color:var(--muted);font-size:.82rem;margin-top:26px;line-height:1.6}
+  .note b{color:var(--ink)}
+  code{background:rgba(168,217,63,.15);color:var(--accent);padding:2px 6px;border-radius:5px;font-weight:600}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <svg class="mark" viewBox="0 0 120 120" aria-hidden="true">
+      <rect x="30" y="30" width="60" height="60" transform="rotate(45 60 60)" stroke-width="7"/>
+      <path d="M45 40 L66 60 L45 80" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1>BDS Corp — Hiring Suite</h1>
+    <p class="sub">A candidate assessment test and an HR hiring dashboard.</p>
+    <div class="cards">
+      <a class="card" href="assessment.html">
+        <h2>Candidate Assessment</h2>
+        <p>Typing speed &amp; accuracy test plus two short written sections. Share this link with candidates.</p>
+        <span class="go">Open assessment →</span>
+      </a>
+      <a class="card" href="portal.html">
+        <h2>HR Portal</h2>
+        <p>Analytics, applicant pipeline, interviews, and employee onboarding. For the hiring team.</p>
+        <span class="go">Open portal →</span>
+      </a>
+    </div>
+    <p class="note">
+      <b>HR portal demo login:</b> username <code>admin</code> &middot; password <code>bds2026</code><br>
+      Data is saved in the browser (localStorage) for now. A shared, secure, multi-device database version is the next step.
+    </p>
+  </div>
+</body>
+</html>
