@@ -14,6 +14,7 @@
     --line: #26346c;
     --line-strong: #3a4a86;
     --hint: #5b6a90;
+    --panel: #0e1638;
     --accent: #a8d93f;
     --accent-soft: rgba(168,217,63,0.15);
     --accent-ink: #0a1030;
@@ -39,6 +40,7 @@
     --line: #e2e7ef;
     --line-strong: #cdd5e2;
     --hint: #9aa4b8;
+    --panel: #f4f7fb;
     --accent: #9ccc32;
     --accent-soft: rgba(122,170,30,0.16);
     --accent-ink: #0a1030;
@@ -360,6 +362,41 @@
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+  /* data entry section */
+  .de-block { background: var(--ground); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; }
+  .de-h { margin: 0 0 12px; font-size: .74rem; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); font-weight: 700; }
+  .steps { list-style: none; counter-reset: s; margin: 0; padding: 0; }
+  .steps > li { counter-increment: s; position: relative; padding: 0 0 15px 42px; font-size: .93rem; }
+  .steps > li:last-child { padding-bottom: 0; }
+  .steps > li::before { content: counter(s); position: absolute; left: 0; top: -2px; width: 28px; height: 28px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: .88rem; border-radius: 8px; }
+  .steps > li::after { content: ""; position: absolute; left: 13px; top: 30px; bottom: 4px; width: 2px; background: var(--line); }
+  .steps > li:last-child::after { display: none; }
+  .steps b { color: var(--ink); }
+  .steps .s2 { color: var(--muted); }
+  code { background: var(--accent-soft); color: var(--accent-fg); padding: 2px 7px; border-radius: 6px; font-family: var(--mono); font-size: .88em; font-weight: 600; }
+  .headings { margin: 9px 0 2px; background: var(--panel); border: 1px solid var(--line-strong); border-radius: 9px; padding: 10px 13px; font-family: var(--mono); font-size: .84rem; color: var(--ink); overflow-x: auto; white-space: nowrap; }
+  .headings .pipe { color: var(--hint); margin: 0 8px; }
+  .callout { margin-top: 8px; font-size: .84rem; color: var(--muted); }
+  .callout b { color: var(--warn); }
+  .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  @media (max-width: 560px){ .notes { grid-template-columns: 1fr; } }
+  .dnote { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px; padding: 11px 13px; }
+  .dnote-tag { display: inline-block; font-size: .58rem; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; color: var(--accent-ink); background: var(--accent); padding: 2px 8px; border-radius: 999px; margin-bottom: 7px; }
+  .dnote-body { font-size: .88rem; color: var(--ink); line-height: 1.55; }
+  .up-drop { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-align: center; border: 2px dashed var(--line-strong); border-radius: 12px; padding: 24px 16px; cursor: pointer; transition: border-color .15s, background .15s; }
+  .up-drop:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .up-ic { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 10px; background: var(--accent-soft); color: var(--accent-fg); font-size: 1.5rem; font-weight: 700; }
+  .up-drop b { font-size: .96rem; }
+  .up-drop span { font-size: .8rem; color: var(--muted); }
+  .up-has { display: flex; align-items: center; gap: 12px; border: 1px solid var(--good); background: var(--good-soft); border-radius: 12px; padding: 13px 15px; }
+  .up-file-ic { width: 40px; height: 40px; flex: none; display: grid; place-items: center; background: var(--panel); color: var(--good); border-radius: 8px; font-size: .6rem; font-weight: 800; }
+  .up-meta { flex: 1; min-width: 0; }
+  .up-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .up-size { font-size: .8rem; color: var(--muted); }
+  .up-ok { color: var(--good); font-weight: 700; font-size: .82rem; }
+  .up-rm { background: none; border: 1px solid var(--line-strong); color: var(--muted); border-radius: 8px; padding: 6px 12px; font-size: .82rem; cursor: pointer; }
+  .up-rm:hover { color: var(--bad); border-color: var(--bad); }
+
   .foot-note { text-align: center; color: var(--faint); font-size: .78rem; margin-top: 18px; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -380,9 +417,10 @@
 
   <div class="stepper hidden" id="stepper">
     <div class="step-pip" data-step="1"><div class="bar"></div><div class="lbl">1 &middot; Typing</div></div>
-    <div class="step-pip" data-step="2"><div class="bar"></div><div class="lbl">2 &middot; Background</div></div>
-    <div class="step-pip" data-step="3"><div class="bar"></div><div class="lbl">3 &middot; Best fit</div></div>
-    <div class="step-pip" data-step="4"><div class="bar"></div><div class="lbl">4 &middot; Review</div></div>
+    <div class="step-pip" data-step="2"><div class="bar"></div><div class="lbl">2 &middot; Data entry</div></div>
+    <div class="step-pip" data-step="3"><div class="bar"></div><div class="lbl">3 &middot; Background</div></div>
+    <div class="step-pip" data-step="4"><div class="bar"></div><div class="lbl">4 &middot; Best fit</div></div>
+    <div class="step-pip" data-step="5"><div class="bar"></div><div class="lbl">5 &middot; Review</div></div>
   </div>
 
   <main class="card">
@@ -448,9 +486,66 @@
       </div>
     </section>
 
-    <!-- STEP 2: BACKGROUND -->
+    <!-- STEP 2: DATA ENTRY -->
+    <section class="screen" id="s-data">
+      <div class="eyebrow"><span class="n">2</span> Data entry</div>
+      <h2 class="q">Build a spreadsheet from these loads.</h2>
+      <p class="lede">Create an Excel file on this computer, enter the loads below into it, save it with your name, and upload it here. This shows us how you set up and organize data in a real spreadsheet.</p>
+
+      <div class="de-block">
+        <div class="de-h">How to do this</div>
+        <ol class="steps">
+          <li><b>Open a new spreadsheet.</b> <span class="s2">On this computer, open <b>Microsoft Excel</b> (or Google Sheets) and start a <b>blank workbook</b>.</span></li>
+          <li><b>Type the column headings in row&nbsp;1.</b> <span class="s2">In the very first row, type these exact headings &mdash; one per column, left to right:</span>
+            <div class="headings">Load #<span class="pipe">|</span>Origin<span class="pipe">|</span>Destination<span class="pipe">|</span>Equipment<span class="pipe">|</span>Weight (lbs)<span class="pipe">|</span>Miles<span class="pipe">|</span>Rate/mi</div>
+          </li>
+          <li><b>Enter the loads.</b> <span class="s2">Read each dispatch note below and type its details into a new row under the headings &mdash; <b>one load per row</b>. Put each value in the matching column.</span></li>
+          <li><b>Save the file with your name.</b> <span class="s2">Save it as an Excel file (<code>.xlsx</code>). In Excel: <b>File &rarr; Save As</b>, choose <b>Excel Workbook (*.xlsx)</b>, and name it:</span>
+            <div class="headings">Your Full Name - Data Entry.xlsx</div>
+            <div class="callout">Example: <code>Ali Raza - Data Entry.xlsx</code>. <b>Tip:</b> save it to the <b>Desktop</b> so it&rsquo;s easy to find in the next step.</div>
+          </li>
+          <li><b>Upload it here.</b> <span class="s2">Come back to this page and use <b>Attach Excel file</b> below to select the file you just saved.</span></li>
+        </ol>
+      </div>
+
+      <div class="de-block">
+        <div class="de-h">Source &mdash; mixed dispatch notes</div>
+        <div class="notes">
+          <div class="dnote"><div class="dnote-tag">Email</div><div class="dnote-body">Load BL-4471 &mdash; need a flatbed out of Houston, TX headed to Denver, CO. Shipper says it weighs about 44,000 lbs. Run is roughly 1,032 miles, rate locked at $3.85/mile.</div></div>
+          <div class="dnote"><div class="dnote-tag">Text message</div><div class="dnote-body">BL-4472 / Laredo TX &rsaquo; Phoenix AZ / step-deck / 38,500 lbs / 934 mi / rate 4.10</div></div>
+          <div class="dnote"><div class="dnote-tag">Broker call &mdash; note</div><div class="dnote-body">Lowboy (RGN), 62,000 lbs, moving from Gary, IN over to Tulsa, OK. 612 miles, they&rsquo;re paying 5.25 a mile. Ref BL-4473.</div></div>
+          <div class="dnote"><div class="dnote-tag">Load ticket</div><div class="dnote-body">Load #: BL-4474 &nbsp;&middot;&nbsp; Equip: Flatbed &nbsp;&middot;&nbsp; Origin: Mobile, AL &nbsp;&middot;&nbsp; Dest: Savannah, GA &nbsp;&middot;&nbsp; 47,200 lbs &nbsp;&middot;&nbsp; 465 miles &nbsp;&middot;&nbsp; $3.60/mi</div></div>
+        </div>
+      </div>
+
+      <div class="de-block">
+        <div class="de-h">Upload your completed file</div>
+        <div class="upload">
+          <input type="file" id="xlFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" hidden>
+          <div class="up-drop" id="upDrop">
+            <div class="up-ic">+</div>
+            <b>Attach Excel file</b>
+            <span>Accepted: .xlsx, .xls or .csv &middot; saved with your name</span>
+          </div>
+          <div class="up-has" id="upHas" hidden>
+            <div class="up-file-ic">XLSX</div>
+            <div class="up-meta"><div class="up-name" id="upName"></div><div class="up-size" id="upSize"></div></div>
+            <span class="up-ok">&#10003; Attached</span>
+            <button class="up-rm" id="upRm" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn--ghost" data-back="s-type">&larr; Back</button>
+        <div class="spacer"></div>
+        <button class="btn btn--primary" id="toBg" disabled>Continue &rarr;</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: BACKGROUND -->
     <section class="screen" id="s-bg">
-      <div class="eyebrow"><span class="n">2</span> Background</div>
+      <div class="eyebrow"><span class="n">3</span> Background</div>
       <h2 class="q">Tell us about your background.</h2>
       <p class="lede">In a paragraph, summarize your educational and professional background: where you studied, the roles you&rsquo;ve held, and the skills you bring.</p>
       <div class="field">
@@ -462,7 +557,7 @@
         </div>
       </div>
       <div class="actions">
-        <button class="btn btn--ghost" data-back="s-type">&larr; Back</button>
+        <button class="btn btn--ghost" data-back="s-data">&larr; Back</button>
         <div class="spacer"></div>
         <button class="btn btn--primary" id="toStep3" disabled>Continue &rarr;</button>
       </div>
@@ -470,7 +565,7 @@
 
     <!-- STEP 3: BEST FIT -->
     <section class="screen" id="s-fit">
-      <div class="eyebrow"><span class="n">3</span> Best fit</div>
+      <div class="eyebrow"><span class="n">4</span> Best fit</div>
       <h2 class="q">Why are you the best fit for this role at BDS Corp?</h2>
       <p class="lede">In a paragraph, tell us why you&rsquo;re the right person for the position you applied for: what makes you stand out and what you&rsquo;d bring to BDS Corp.</p>
       <div class="field">
@@ -490,7 +585,7 @@
 
     <!-- STEP 4: REVIEW -->
     <section class="screen" id="s-review">
-      <div class="eyebrow"><span class="n">4</span> Review</div>
+      <div class="eyebrow"><span class="n">5</span> Review</div>
       <h2 class="q">Review your answers.</h2>
       <p class="lede">Please review your answers, then let the BDS Corp hiring manager know you have finished.</p>
       <div class="report" id="report"></div>
@@ -522,20 +617,21 @@
     name: "", role: "", phone: "", email: "",
     wpm: 0, accuracy: 100, seconds: 0, errors: 0, typingDone: false,
     bg: "", fit: "",
-    // per-section start/end timestamps (ms). s1 = typing, s2 = background, s3 = best fit.
-    t: { begin: 0, s1Start: 0, s1End: 0, s2Start: 0, s2End: 0, s3Start: 0, s3End: 0, review: 0 }
+    dataFile: null, // { name, size, data(base64) } from the Excel upload
+    // per-section start/end timestamps (ms). s1 = typing, sd = data entry, s2 = background, s3 = best fit.
+    t: { begin: 0, s1Start: 0, s1End: 0, sdStart: 0, sdEnd: 0, s2Start: 0, s2End: 0, s3Start: 0, s3End: 0, review: 0 }
   };
 
   function stamp(key) { if (!state.t[key]) state.t[key] = Date.now(); }
   function restamp(key) { state.t[key] = Date.now(); }
 
-  var screens = ["s-start", "s-type", "s-bg", "s-fit", "s-review"];
+  var screens = ["s-start", "s-type", "s-data", "s-bg", "s-fit", "s-review"];
   function show(id) {
     screens.forEach(function (s) {
       document.getElementById(s).classList.toggle("active", s === id);
     });
     var stepper = document.getElementById("stepper");
-    var stepIndex = { "s-type": 1, "s-bg": 2, "s-fit": 3, "s-review": 4 }[id] || 0;
+    var stepIndex = { "s-type": 1, "s-data": 2, "s-bg": 3, "s-fit": 4, "s-review": 5 }[id] || 0;
     stepper.classList.toggle("hidden", stepIndex === 0);
     document.querySelectorAll(".step-pip").forEach(function (p) {
       var n = +p.getAttribute("data-step");
@@ -698,6 +794,37 @@
   });
   document.getElementById("resetType").addEventListener("click", resetTyping);
   toStep2.addEventListener("click", function () {
+    show("s-data"); stamp("sdStart");
+  });
+
+  /* ---------- Data entry (Excel upload) ---------- */
+  var toBg = document.getElementById("toBg");
+  var xlFile = document.getElementById("xlFile");
+  var upDrop = document.getElementById("upDrop");
+  var upHas = document.getElementById("upHas");
+  function humanSize(b){ if (b < 1024) return b + " B"; if (b < 1048576) return Math.round(b/1024) + " KB"; return (b/1048576).toFixed(1) + " MB"; }
+  upDrop.addEventListener("click", function () { xlFile.click(); });
+  xlFile.addEventListener("change", function () {
+    var f = xlFile.files && xlFile.files[0];
+    if (!f) return;
+    if (f.size > 4000000) { toast("That file is too large (max 4 MB)."); xlFile.value = ""; return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      state.dataFile = { name: f.name, size: f.size, data: reader.result };
+      document.getElementById("upName").textContent = f.name;
+      document.getElementById("upSize").textContent = humanSize(f.size);
+      upDrop.hidden = true; upHas.hidden = false;
+      toBg.disabled = false;
+    };
+    reader.readAsDataURL(f);
+  });
+  document.getElementById("upRm").addEventListener("click", function () {
+    xlFile.value = ""; state.dataFile = null;
+    upHas.hidden = true; upDrop.hidden = false;
+    toBg.disabled = true;
+  });
+  toBg.addEventListener("click", function () {
+    restamp("sdEnd");
     show("s-bg"); document.getElementById("bgText").focus();
   });
 
@@ -800,14 +927,44 @@
         '<span class="chip ' + accTag + '">' + state.accuracy + '% accuracy</span>' +
         '<span class="chip">' + state.errors + ' error' + (state.errors === 1 ? '' : 's') + '</span>' +
       '</div></div>' +
-      '<div class="row"><h3>Section 2 &middot; Background</h3>' +
+      '<div class="row"><h3>Section 2 &middot; Data entry (Excel)</h3>' +
+        timingHtml(state.t.sdStart, state.t.sdEnd) +
+        '<div class="prose' + (state.dataFile ? '' : ' empty') + '">' +
+        (state.dataFile ? ('&#128196; ' + esc(state.dataFile.name) + ' (' + humanSize(state.dataFile.size) + ') &mdash; attached') : "No file uploaded.") + '</div></div>' +
+      '<div class="row"><h3>Section 3 &middot; Background</h3>' +
         timingHtml(state.t.s2Start, state.t.s2End) +
         '<div class="prose' + (state.bg ? '' : ' empty') + '">' +
         (state.bg ? esc(state.bg) : "No answer provided.") + '</div></div>' +
-      '<div class="row"><h3>Section 3 &middot; Why they&rsquo;re the best fit</h3>' +
+      '<div class="row"><h3>Section 4 &middot; Why they&rsquo;re the best fit</h3>' +
         timingHtml(state.t.s3Start, state.t.s3End) +
         '<div class="prose' + (state.fit ? '' : ' empty') + '">' +
         (state.fit ? esc(state.fit) : "No answer provided.") + '</div></div>';
+    saveSubmission();
+  }
+
+  function todayIso() {
+    var d = new Date();
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  }
+  // Save the completed submission where the HR portal reads it (same-origin localStorage).
+  function saveSubmission() {
+    var rec = {
+      id: state._subId || ("sub" + Date.now()),
+      date: todayIso(),
+      name: state.name, position: state.role,
+      phone: state.phone, email: state.email,
+      wpm: state.wpm, accuracy: state.accuracy,
+      total: fmtDur(state.t.s1End - state.t.s1Start),
+      bg: state.bg, fit: state.fit,
+      dataFile: state.dataFile ? { name: state.dataFile.name, size: state.dataFile.size, data: state.dataFile.data } : null
+    };
+    try {
+      var list = JSON.parse(localStorage.getItem("bds_assessments_v1") || "null") || [];
+      if (state._subId) list = list.filter(function (x) { return x.id !== state._subId; });
+      state._subId = rec.id;
+      list.unshift(rec);
+      localStorage.setItem("bds_assessments_v1", JSON.stringify(list));
+    } catch (e) {}
   }
 
   function resultsText() {
@@ -831,14 +988,20 @@
       "  Accuracy:   " + state.accuracy + "%",
       "  Errors:     " + state.errors,
       "",
-      "SECTION 2 - EDUCATIONAL & PROFESSIONAL BACKGROUND",
+      "SECTION 2 - DATA ENTRY (EXCEL)",
+      "  Started:    " + clockStr(t.sdStart),
+      "  Ended:      " + clockStr(t.sdEnd),
+      "  Time taken: " + fmtDur(t.sdEnd - t.sdStart),
+      "  File:       " + (state.dataFile ? state.dataFile.name : "(no file uploaded)"),
+      "",
+      "SECTION 3 - EDUCATIONAL & PROFESSIONAL BACKGROUND",
       "  Started:    " + clockStr(t.s2Start),
       "  Ended:      " + clockStr(t.s2End),
       "  Time taken: " + fmtDur(t.s2End - t.s2Start),
       "",
       state.bg || "(no answer)",
       "",
-      "SECTION 3 - WHY THEY ARE THE BEST FIT FOR THE ROLE",
+      "SECTION 4 - WHY THEY ARE THE BEST FIT FOR THE ROLE",
       "  Started:    " + clockStr(t.s3Start),
       "  Ended:      " + clockStr(t.s3End),
       "  Time taken: " + fmtDur(t.s3End - t.s3Start),
