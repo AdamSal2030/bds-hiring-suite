@@ -990,11 +990,17 @@
     var m = Math.floor(s / 60), r = s % 60;
     return m + "m " + (r < 10 ? "0" : "") + r + "s";
   }
+  // Duration between two timestamps. Returns "--" if either was never recorded
+  // (e.g. a section the candidate skipped), so we never show a bogus epoch-length time.
+  function durBetween(startMs, endMs) {
+    if (!startMs || !endMs || endMs < startMs) return "--";
+    return fmtDur(endMs - startMs);
+  }
   function timingHtml(startMs, endMs) {
     return '<div class="timing">' +
       '<span><b>Started</b>' + clockStr(startMs) + '</span>' +
       '<span><b>Ended</b>' + clockStr(endMs) + '</span>' +
-      '<span class="dur"><b>Time taken</b>' + fmtDur(endMs - startMs) + '</span>' +
+      '<span class="dur"><b>Time taken</b>' + durBetween(startMs, endMs) + '</span>' +
     '</div>';
   }
   function buildReport() {
@@ -1008,7 +1014,7 @@
         '<dt>Phone</dt><dd>' + esc(state.phone) + '</dd>' +
         '<dt>Email</dt><dd>' + esc(state.email) + '</dd>' +
         '<dt>Completed</dt><dd>' + esc(nowStr()) + '</dd>' +
-        '<dt>Total time</dt><dd>' + fmtDur(state.t.review - state.t.begin) + '</dd>' +
+        '<dt>Total time</dt><dd>' + durBetween(state.t.begin, state.t.review) + '</dd>' +
       '</dl></div>' +
       '<div class="row"><h3>Section 1 &middot; Typing test</h3>' +
         timingHtml(state.t.s1Start, state.t.s1End) +
@@ -1050,7 +1056,7 @@
       name: state.name, position: state.role,
       phone: state.phone, email: state.email,
       wpm: state.wpm, accuracy: state.accuracy,
-      total: fmtDur(state.t.s1End - state.t.s1Start),
+      total: durBetween(state.t.s1Start, state.t.s1End),
       bg: state.bg, fit: state.fit,
       dataFile: state.dataFile ? { name: state.dataFile.name, size: state.dataFile.size, data: state.dataFile.data } : null,
       emailDone: state.emailDone, emailSubject: state.emailSubject, emailBody: state.emailBody
@@ -1075,12 +1081,12 @@
       "  Position:   " + state.role,
       "  Phone:      " + state.phone,
       "  Email:      " + state.email,
-      "  Total time: " + fmtDur(t.review - t.begin),
+      "  Total time: " + durBetween(t.begin, t.review),
       "",
       "SECTION 1 - TYPING TEST",
       "  Started:    " + clockStr(t.s1Start),
       "  Ended:      " + clockStr(t.s1End),
-      "  Time taken: " + fmtDur(t.s1End - t.s1Start),
+      "  Time taken: " + durBetween(t.s1Start, t.s1End),
       "  Speed:      " + state.wpm + " WPM",
       "  Accuracy:   " + state.accuracy + "%",
       "  Errors:     " + state.errors,
@@ -1088,13 +1094,13 @@
       "SECTION 2 - DATA ENTRY (EXCEL)",
       "  Started:    " + clockStr(t.sdStart),
       "  Ended:      " + clockStr(t.sdEnd),
-      "  Time taken: " + fmtDur(t.sdEnd - t.sdStart),
+      "  Time taken: " + durBetween(t.sdStart, t.sdEnd),
       "  File:       " + (state.dataFile ? state.dataFile.name : "(no file uploaded)"),
       "",
       "SECTION 3 - EMAIL WRITING (SALES)",
       "  Started:    " + clockStr(t.seStart),
       "  Ended:      " + clockStr(t.seEnd),
-      "  Time taken: " + fmtDur(t.seEnd - t.seStart),
+      "  Time taken: " + durBetween(t.seStart, t.seEnd),
       "  Status:     " + (state.emailDone ? "Marked as sent" : "Not marked sent"),
       "  Subject:    " + (state.emailSubject || "(not provided)"),
       "",
@@ -1103,14 +1109,14 @@
       "SECTION 4 - EDUCATIONAL & PROFESSIONAL BACKGROUND",
       "  Started:    " + clockStr(t.s2Start),
       "  Ended:      " + clockStr(t.s2End),
-      "  Time taken: " + fmtDur(t.s2End - t.s2Start),
+      "  Time taken: " + durBetween(t.s2Start, t.s2End),
       "",
       state.bg || "(no answer)",
       "",
       "SECTION 5 - WHY THEY ARE THE BEST FIT FOR THE ROLE",
       "  Started:    " + clockStr(t.s3Start),
       "  Ended:      " + clockStr(t.s3End),
-      "  Time taken: " + fmtDur(t.s3End - t.s3Start),
+      "  Time taken: " + durBetween(t.s3Start, t.s3End),
       "",
       state.fit || "(no answer)",
       ""
