@@ -246,12 +246,6 @@
   .btn--ghost { background: transparent; color: var(--muted); border-color: var(--line-strong); }
   .btn--ghost:hover { color: var(--ink); border-color: var(--faint); }
   .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
-  .scn-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-  .scn-tab { padding: 7px 13px; font-size: .82rem; border-radius: 9px; cursor: pointer;
-    background: transparent; color: var(--muted); border: 1px solid var(--line-strong); font-weight: 600; }
-  .scn-tab:hover { color: var(--ink); }
-  .scn-tab.is-on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .scn-note { font-size: .86rem; color: var(--muted); margin: 12px 0 0; }
 
   .note {
     display: flex; gap: 10px;
@@ -570,17 +564,7 @@
 
       <div class="de-block">
         <div class="de-h">The scenario</div>
-        <div class="scn-tabs">
-          <button class="scn-tab is-on" data-scn="1" type="button">Scenario 1 &middot; New enquiry</button>
-          <button class="scn-tab" data-scn="2" type="button">Scenario 2 &middot; Simple version</button>
-          <button class="scn-tab" data-scn="3" type="button">Scenario 3 &middot; Keep a customer</button>
-          <button class="scn-tab" data-scn="4" type="button">Scenario 4 &middot; Price a lane</button>
-        </div>
-        <p class="scn" id="scn1">A new customer, <b>Sam</b>, emailed us after finding Badass Logistics online. He needs a large excavator moved between two job sites, and he is contacting other carriers too, so he has not decided who to go with yet.<br><br>Your job: write an email to Sam that makes a strong first impression, gives him confidence in us, and asks him to book the move with Badass Logistics.</p>
-        <p class="scn" id="scn2" hidden>A customer named <b>Sam</b> wants us to move a large, heavy machine to another city. Another company offered to do the same move for less money, so Sam is not sure who to go with. You do not need any special knowledge for this one.<br><br>Your job: in your own words, write a friendly email to Sam explaining why paying a little more for a careful, fully-insured, on-time service is the safer choice, and politely ask him to book with us.</p>
-        <p class="scn" id="scn3" hidden>A repeat customer, <b>Sam</b>, is upset. His last load with us arrived a day late because of a permit hold-up, and now he is thinking about using a different company for his next job.<br><br>Your job: write an email to Sam that owns the mistake, rebuilds his trust, and convinces him to give Badass Logistics his next load.</p>
-        <p class="scn" id="scn4" hidden>Sam asked us for a price to move a <b>bulldozer</b> from <b>Dallas, TX to Kansas City, MO</b> (about 550 miles). After checking the route, the fair all-in rate is <b>$4,850</b>, which covers the truck, fuel, the oversize permits, and a pilot car. Sam has hinted he wants the lowest number possible.<br><br>Your job: write an email to Sam that gives him the <b>$4,850</b> price clearly and confidently, breaks down what is included so the number makes sense, convinces him it is worth it, and asks him to book with Badass Logistics.</p>
-        <p class="scn-note">New to logistics? Pick <b>Scenario 2</b>. It needs no special knowledge, and we are looking at how clearly and convincingly you write, whichever scenario you choose.</p>
+        <p class="scn">Sam asked us for a price to move a <b>bulldozer</b> from <b>Dallas, TX to Kansas City, MO</b> (about 550 miles). After checking the route, the fair all-in rate is <b>$4,850</b>, which covers the truck, fuel, the oversize permits, and a pilot car. Sam has hinted he wants the lowest number possible.<br><br>Your job: write an email to Sam that gives him the <b>$4,850</b> price clearly and confidently, breaks down what is included so the number makes sense, convinces him it is worth it, and asks him to book with Badass Logistics.</p>
       </div>
 
       <div class="de-block">
@@ -705,7 +689,7 @@
     wpm: 0, accuracy: 100, seconds: 0, errors: 0, typingDone: false,
     bg: "", fit: "",
     dataFile: null, // { name, size, data(base64) } from the Excel upload
-    emailDone: false, emailSubject: "", emailBody: "", emailScenario: 1,
+    emailDone: false, emailSubject: "", emailBody: "",
     // per-section start/end timestamps (ms). s1 typing, sd data entry, se email, s2 background, s3 best fit.
     t: { begin: 0, s1Start: 0, s1End: 0, sdStart: 0, sdEnd: 0, seStart: 0, seEnd: 0, s2Start: 0, s2End: 0, s3Start: 0, s3End: 0, review: 0 }
   };
@@ -915,18 +899,6 @@
 
   /* ---------- Email writing ---------- */
   var toBg2 = document.getElementById("toBg2");
-  function scenarioLabel(n) {
-    return n === 4 ? "4 (price a lane)" : n === 3 ? "3 (keep a customer)" : n === 2 ? "2 (simple)" : "1 (new enquiry)";
-  }
-  // Scenario switch (new enquiry / simple version / keep a customer)
-  document.querySelectorAll(".scn-tab").forEach(function (t) {
-    t.addEventListener("click", function () {
-      var n = t.getAttribute("data-scn");
-      state.emailScenario = parseInt(n, 10);
-      document.querySelectorAll(".scn-tab").forEach(function (x) { x.classList.toggle("is-on", x === t); });
-      document.querySelectorAll(".scn").forEach(function (p) { p.hidden = (p.id !== "scn" + n); });
-    });
-  });
   document.getElementById("markSent").addEventListener("click", function () {
     state.emailDone = !state.emailDone;
     document.getElementById("sentFlag").hidden = !state.emailDone;
@@ -1056,7 +1028,7 @@
         (state.dataFile ? ('&#128196; ' + esc(state.dataFile.name) + ' (' + humanSize(state.dataFile.size) + ') attached') : "No file uploaded.") + '</div></div>' +
       '<div class="row"><h3>Section 3 &middot; Email writing (sales)</h3>' +
         timingHtml(state.t.seStart, state.t.seEnd) +
-        '<div class="chips"><span class="chip">Scenario ' + scenarioLabel(state.emailScenario) + '</span><span class="chip ' + (state.emailDone ? 'good' : '') + '">' + (state.emailDone ? 'Marked as sent' : 'Not marked sent') + '</span></div>' +
+        '<div class="chips"><span class="chip ' + (state.emailDone ? 'good' : '') + '">' + (state.emailDone ? 'Marked as sent' : 'Not marked sent') + '</span></div>' +
         (state.emailSubject ? '<div class="prose" style="margin-top:8px"><b>Subject:</b> ' + esc(state.emailSubject) + '</div>' : '') +
         (state.emailBody ? '<div class="prose" style="margin-top:6px">' + esc(state.emailBody) + '</div>' : '') +
       '</div>' +
@@ -1086,8 +1058,7 @@
       total: fmtDur(state.t.s1End - state.t.s1Start),
       bg: state.bg, fit: state.fit,
       dataFile: state.dataFile ? { name: state.dataFile.name, size: state.dataFile.size, data: state.dataFile.data } : null,
-      emailDone: state.emailDone, emailSubject: state.emailSubject, emailBody: state.emailBody,
-      emailScenario: state.emailScenario
+      emailDone: state.emailDone, emailSubject: state.emailSubject, emailBody: state.emailBody
     };
     try {
       var list = JSON.parse(localStorage.getItem("bds_assessments_v1") || "null") || [];
@@ -1129,7 +1100,6 @@
       "  Started:    " + clockStr(t.seStart),
       "  Ended:      " + clockStr(t.seEnd),
       "  Time taken: " + fmtDur(t.seEnd - t.seStart),
-      "  Scenario:   " + scenarioLabel(state.emailScenario),
       "  Status:     " + (state.emailDone ? "Marked as sent" : "Not marked sent"),
       "  Subject:    " + (state.emailSubject || "(not provided)"),
       "",

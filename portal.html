@@ -766,13 +766,13 @@
   var SAMPLE_EXTRAS = {
     "Bilal Ahmed": {
       dataFile: { name: "Bilal Ahmed - Data Entry.xlsx", size: 6954, data: SAMPLE_XLSX_1 },
-      emailDone: true, emailScenario: 1,
+      emailDone: true,
       emailSubject: "Your equipment move - why Badass Logistics is the right call",
       emailBody: "Hi Sam, thanks for reaching out about moving your excavator. We handle oversize and heavy loads like this every week, so the permits, routing, and escorts are second nature to us. Book with Badass Logistics and you get one dedicated coordinator, full cargo insurance, and clear updates from pickup to delivery, with no surprises along the way. I am confident we can move your machine safely and on schedule. Can I put together a firm quote and get you on the calendar this week? Regards, Bilal Ahmed, bilal.ahmed@email.com"
     },
     "Fatima Noor": {
       dataFile: { name: "Fatima Noor - Data Entry.xlsx", size: 6946, data: SAMPLE_XLSX_2 },
-      emailDone: true, emailScenario: 2,
+      emailDone: true,
       emailSubject: "Your excavator move - the full picture on pricing",
       emailBody: "Hi Sam, thank you for sharing the other quote. A $4,400 rate usually means permits, escort, and insurance get billed separately once the load is moving, which is where the surprises come from. Our $5,235 is all-in: permits, pilot car, and coverage, with one point of contact from pickup to delivery. For a machine this valuable, the peace of mind is worth the difference, and we can guarantee the pickup window. Shall I lock in your date today? Regards, Fatima Noor, fatima.noor@email.com"
     }
@@ -780,7 +780,7 @@
   function applyExtras(list) {
     list.forEach(function (c) {
       var ex = SAMPLE_EXTRAS[c.name];
-      if (ex && !c.dataFile) { c.dataFile = ex.dataFile; c.emailDone = ex.emailDone; c.emailScenario = ex.emailScenario; c.emailSubject = ex.emailSubject; c.emailBody = ex.emailBody; }
+      if (ex && !c.dataFile) { c.dataFile = ex.dataFile; c.emailDone = ex.emailDone; c.emailSubject = ex.emailSubject; c.emailBody = ex.emailBody; }
     });
     return list;
   }
@@ -1014,7 +1014,7 @@
           (c.dataFile ? dkv("Data entry file", esc(c.dataFile.name)) : "") +
         '</div>' +
         (c.emailDone || c.emailSubject || c.emailBody ?
-          '<div class="ans"><h4>Email writing (sales)' + (c.emailScenario ? ' &middot; scenario ' + (c.emailScenario === 4 ? '4 (price a lane)' : c.emailScenario === 3 ? '3 (keep a customer)' : c.emailScenario === 2 ? '2 (simple)' : '1 (new enquiry)') : '') + (c.emailDone ? ' &middot; marked sent' : '') + '</h4>' +
+          '<div class="ans"><h4>Email writing (sales)' + (c.emailDone ? ' &middot; marked sent' : '') + '</h4>' +
           (c.emailSubject ? '<p><b>Subject:</b> ' + esc(c.emailSubject) + '</p>' : '') +
           '<p>' + esc(c.emailBody || "(email body not pasted, check the info@ inbox)") + '</p></div>' : '') +
         '<div class="ans"><h4>Background</h4><p>' + esc(c.bg) + '</p></div>' +
