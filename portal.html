@@ -1047,7 +1047,7 @@
           (c.dataFile ? dkv("Data entry file", esc(c.dataFile.name)) : "") +
         '</div>' +
         (c.emailDone || c.emailSubject || c.emailBody ?
-          '<div class="ans"><h4>Email writing (sales)' + (c.emailScenario ? ' &middot; scenario ' + (c.emailScenario === 3 ? '3 (keep a customer)' : c.emailScenario === 2 ? '2 (simple)' : '1 (new enquiry)') : '') + (c.emailDone ? ' &middot; marked sent' : '') + '</h4>' +
+          '<div class="ans"><h4>Email writing (sales)' + (c.emailScenario ? ' &middot; scenario ' + (c.emailScenario === 4 ? '4 (price a lane)' : c.emailScenario === 3 ? '3 (keep a customer)' : c.emailScenario === 2 ? '2 (simple)' : '1 (new enquiry)') : '') + (c.emailDone ? ' &middot; marked sent' : '') + '</h4>' +
           (c.emailSubject ? '<p><b>Subject:</b> ' + esc(c.emailSubject) + '</p>' : '') +
           '<p>' + esc(c.emailBody || "(email body not pasted, check the info@ inbox)") + '</p></div>' : '') +
         '<div class="ans"><h4>Background</h4><p>' + esc(c.bg) + '</p></div>' +
