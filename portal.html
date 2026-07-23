@@ -242,6 +242,21 @@
 
   .crow-detail { display: none; padding: 4px 16px 18px; border-top: 1px solid var(--line); background: var(--panel); }
   .crow.open .crow-detail { display: block; }
+  .filetag {
+    display: inline-block; margin-left: 8px; font-size: .66rem; font-weight: 800; letter-spacing: .03em;
+    padding: 2px 8px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); vertical-align: middle;
+  }
+  .xl-hint {
+    display: flex; align-items: center; gap: 14px; margin: 0 0 16px; padding: 13px 16px;
+    border: 1px solid var(--accent); border-radius: 12px; background: var(--accent-soft);
+  }
+  .xl-hint .ic { font-size: 1.35rem; line-height: 1; }
+  .xl-hint .tx { flex: 1; font-size: .9rem; color: var(--ink); line-height: 1.5; }
+  .xl-hint .tx b { color: var(--ink); }
+  .xl-hint .filetag { margin: 0 2px; }
+  @keyframes xlpulse { 0%,100% { box-shadow: 0 0 0 0 rgba(168,217,63,0); } 50% { box-shadow: 0 0 0 6px rgba(168,217,63,.55); } }
+  .xl-pulse { animation: xlpulse 1s ease-in-out 3; }
+  .crow.flash { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px 20px; margin: 14px 0 4px; }
   @media (max-width: 620px){ .detail-grid { grid-template-columns: 1fr; } }
   .dkv { font-size: .86rem; }
@@ -493,6 +508,11 @@
         <input type="search" id="searchBox" />
       </div>
       <button class="btn btn--primary" id="addResultBtn" type="button">+ Add result</button>
+    </div>
+    <div class="xl-hint" id="xlHint" hidden>
+      <div class="ic">&#128196;</div>
+      <div class="tx"><b>Where is the uploaded Excel from the assessment?</b> When a candidate finishes the data-entry test, the Excel file they built comes straight here. Any candidate with a file is tagged <span class="filetag">Excel</span> in the list. Open their row to see <b>Download Excel</b>.</div>
+      <button class="btn btn--primary sm" id="xlDemoBtn" type="button">See an example</button>
     </div>
     <div id="candList"></div>
     </div><!-- /view-assess -->
@@ -763,8 +783,8 @@
     "Bilal Ahmed": {
       dataFile: { name: "Bilal Ahmed - Data Entry.xlsx", size: 6954, data: SAMPLE_XLSX_1 },
       emailDone: true, emailScenario: 1,
-      emailSubject: "Houston to Denver - why our $5,235 is the safer bet",
-      emailBody: "Hi Sam, I understand the $4,400 quote is tempting, but here is what our $5,235 covers that theirs likely does not: oversize permits for every state on the route, a certified pilot car, and full cargo insurance on your excavator. That is the difference between a load that arrives on schedule and one that sits at a weigh station. We run this Houston to Denver lane every week with a 99% on-time record. I would rather quote you honestly now than surprise you with fees later. Can I get you on the schedule this week? Regards, Bilal Ahmed, bilal.ahmed@email.com"
+      emailSubject: "Your equipment move - why Badass Logistics is the right call",
+      emailBody: "Hi Sam, thanks for reaching out about moving your excavator. We handle oversize and heavy loads like this every week, so the permits, routing, and escorts are second nature to us. Book with Badass Logistics and you get one dedicated coordinator, full cargo insurance, and clear updates from pickup to delivery, with no surprises along the way. I am confident we can move your machine safely and on schedule. Can I put together a firm quote and get you on the calendar this week? Regards, Bilal Ahmed, bilal.ahmed@email.com"
     },
     "Fatima Noor": {
       dataFile: { name: "Fatima Noor - Data Entry.xlsx", size: 6946, data: SAMPLE_XLSX_2 },
@@ -940,10 +960,27 @@
     // Candidate list
     renderList(dates, byDate, "");
 
+    // Show the "where is the Excel" helper only when at least one candidate has a file
+    var anyFile = CAND.some(function (c) { return c.dataFile; });
+    document.getElementById("xlHint").hidden = !anyFile;
+
     // Search
     var box = document.getElementById("searchBox");
     box.oninput = function () { renderList(dates, byDate, box.value.trim().toLowerCase()); };
   }
+
+  // "See an example": open the first candidate that has an uploaded Excel and flash the button
+  document.getElementById("xlDemoBtn").addEventListener("click", function () {
+    var btn = document.querySelector("#candList [data-xlid]");
+    if (!btn) return;
+    var crow = btn.closest(".crow");
+    if (crow) {
+      crow.classList.add("open", "flash");
+      crow.scrollIntoView({ block: "center", behavior: "smooth" });
+      btn.classList.remove("xl-pulse"); void btn.offsetWidth; btn.classList.add("xl-pulse");
+      setTimeout(function () { crow.classList.remove("flash"); }, 2400);
+    }
+  });
 
   function renderList(dates, byDate, q) {
     var host = document.getElementById("candList");
@@ -995,7 +1032,7 @@
 
   function rowHtml(c) {
     return '<div class="crow" data-cid="' + c.id + '"><div class="crow-main">' +
-      '<div><div class="cand-name">' + esc(c.name) + '</div><div class="cand-sub">' + esc(c.phone) + '</div></div>' +
+      '<div><div class="cand-name">' + esc(c.name) + (c.dataFile ? ' <span class="filetag">Excel</span>' : '') + '</div><div class="cand-sub">' + esc(c.phone) + '</div></div>' +
       '<div class="col-pos">' + esc(c.position) + '</div>' +
       '<div class="chip ' + speedClass(c.wpm) + ' tnum">' + c.wpm + ' WPM</div>' +
       '<div class="chip ' + accClass(c.accuracy) + ' tnum">' + c.accuracy + '%</div>' +
@@ -1010,7 +1047,7 @@
           (c.dataFile ? dkv("Data entry file", esc(c.dataFile.name)) : "") +
         '</div>' +
         (c.emailDone || c.emailSubject || c.emailBody ?
-          '<div class="ans"><h4>Email writing (sales)' + (c.emailScenario ? ' &middot; scenario ' + (c.emailScenario === 2 ? '2 (simple)' : '1 (freight pricing)') : '') + (c.emailDone ? ' &middot; marked sent' : '') + '</h4>' +
+          '<div class="ans"><h4>Email writing (sales)' + (c.emailScenario ? ' &middot; scenario ' + (c.emailScenario === 3 ? '3 (keep a customer)' : c.emailScenario === 2 ? '2 (simple)' : '1 (new enquiry)') : '') + (c.emailDone ? ' &middot; marked sent' : '') + '</h4>' +
           (c.emailSubject ? '<p><b>Subject:</b> ' + esc(c.emailSubject) + '</p>' : '') +
           '<p>' + esc(c.emailBody || "(email body not pasted, check the info@ inbox)") + '</p></div>' : '') +
         '<div class="ans"><h4>Background</h4><p>' + esc(c.bg) + '</p></div>' +

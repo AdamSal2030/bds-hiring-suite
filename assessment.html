@@ -566,12 +566,14 @@
       <div class="de-block">
         <div class="de-h">The scenario</div>
         <div class="scn-tabs">
-          <button class="scn-tab is-on" data-scn="1" type="button">Scenario 1 &middot; Freight pricing</button>
+          <button class="scn-tab is-on" data-scn="1" type="button">Scenario 1 &middot; New enquiry</button>
           <button class="scn-tab" data-scn="2" type="button">Scenario 2 &middot; Simple version</button>
+          <button class="scn-tab" data-scn="3" type="button">Scenario 3 &middot; Keep a customer</button>
         </div>
-        <p class="scn" id="scn1">A repeat customer, <b>Sam</b>, asked us to move an excavator (an over-dimensional load) from <b>Houston, TX to Denver, CO</b>. You quoted <b>$5,235</b>, and that covers the line-haul, fuel, the oversize permit, and a pilot car. Sam just replied that another carrier offered <b>$4,400</b>, and he&rsquo;s thinking of going with them.<br><br>Your job: write an email to Sam that convinces him the Badass Logistics price is worth it, and asks him to book with us.</p>
+        <p class="scn" id="scn1">A new customer, <b>Sam</b>, emailed us after finding Badass Logistics online. He needs a large excavator moved between two job sites, and he is contacting other carriers too, so he has not decided who to go with yet.<br><br>Your job: write an email to Sam that makes a strong first impression, gives him confidence in us, and asks him to book the move with Badass Logistics.</p>
         <p class="scn" id="scn2" hidden>A customer named <b>Sam</b> wants us to move a large, heavy machine to another city. Another company offered to do the same move for less money, so Sam is not sure who to go with. You do not need any special knowledge for this one.<br><br>Your job: in your own words, write a friendly email to Sam explaining why paying a little more for a careful, fully-insured, on-time service is the safer choice, and politely ask him to book with us.</p>
-        <p class="scn-note">New to logistics? Pick <b>Scenario 2</b>. It needs no special knowledge, and we are looking at how clearly and convincingly you write either way.</p>
+        <p class="scn" id="scn3" hidden>A repeat customer, <b>Sam</b>, is upset. His last load with us arrived a day late because of a permit hold-up, and now he is thinking about using a different company for his next job.<br><br>Your job: write an email to Sam that owns the mistake, rebuilds his trust, and convinces him to give Badass Logistics his next load.</p>
+        <p class="scn-note">New to logistics? Pick <b>Scenario 2</b>. It needs no special knowledge, and we are looking at how clearly and convincingly you write, whichever scenario you choose.</p>
       </div>
 
       <div class="de-block">
@@ -894,14 +896,16 @@
 
   /* ---------- Email writing ---------- */
   var toBg2 = document.getElementById("toBg2");
-  // Scenario switch (freight pricing vs. simple version)
+  function scenarioLabel(n) {
+    return n === 3 ? "3 (keep a customer)" : (n === 2 ? "2 (simple)" : "1 (new enquiry)");
+  }
+  // Scenario switch (new enquiry / simple version / keep a customer)
   document.querySelectorAll(".scn-tab").forEach(function (t) {
     t.addEventListener("click", function () {
       var n = t.getAttribute("data-scn");
       state.emailScenario = parseInt(n, 10);
       document.querySelectorAll(".scn-tab").forEach(function (x) { x.classList.toggle("is-on", x === t); });
-      document.getElementById("scn1").hidden = (n !== "1");
-      document.getElementById("scn2").hidden = (n !== "2");
+      document.querySelectorAll(".scn").forEach(function (p) { p.hidden = (p.id !== "scn" + n); });
     });
   });
   document.getElementById("markSent").addEventListener("click", function () {
@@ -1033,7 +1037,7 @@
         (state.dataFile ? ('&#128196; ' + esc(state.dataFile.name) + ' (' + humanSize(state.dataFile.size) + ') attached') : "No file uploaded.") + '</div></div>' +
       '<div class="row"><h3>Section 3 &middot; Email writing (sales)</h3>' +
         timingHtml(state.t.seStart, state.t.seEnd) +
-        '<div class="chips"><span class="chip">Scenario ' + (state.emailScenario === 2 ? '2 (simple)' : '1 (freight pricing)') + '</span><span class="chip ' + (state.emailDone ? 'good' : '') + '">' + (state.emailDone ? 'Marked as sent' : 'Not marked sent') + '</span></div>' +
+        '<div class="chips"><span class="chip">Scenario ' + scenarioLabel(state.emailScenario) + '</span><span class="chip ' + (state.emailDone ? 'good' : '') + '">' + (state.emailDone ? 'Marked as sent' : 'Not marked sent') + '</span></div>' +
         (state.emailSubject ? '<div class="prose" style="margin-top:8px"><b>Subject:</b> ' + esc(state.emailSubject) + '</div>' : '') +
         (state.emailBody ? '<div class="prose" style="margin-top:6px">' + esc(state.emailBody) + '</div>' : '') +
       '</div>' +
@@ -1106,7 +1110,7 @@
       "  Started:    " + clockStr(t.seStart),
       "  Ended:      " + clockStr(t.seEnd),
       "  Time taken: " + fmtDur(t.seEnd - t.seStart),
-      "  Scenario:   " + (state.emailScenario === 2 ? "2 (simple version)" : "1 (freight pricing)"),
+      "  Scenario:   " + scenarioLabel(state.emailScenario),
       "  Status:     " + (state.emailDone ? "Marked as sent" : "Not marked sent"),
       "  Subject:    " + (state.emailSubject || "(not provided)"),
       "",
