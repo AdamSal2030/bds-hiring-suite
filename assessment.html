@@ -65,11 +65,13 @@
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
   }
+  [hidden] { display: none !important; }
   .wrap {
-    max-width: 760px;
+    max-width: 1120px;
     margin: 0 auto;
-    padding: 28px 20px 72px;
+    padding: 28px 32px 72px;
   }
+  @media (max-width: 620px) { .wrap { padding: 20px 16px 60px; } }
 
   /* Masthead */
   .mast {
@@ -378,6 +380,9 @@
   .headings .pipe { color: var(--hint); margin: 0 8px; }
   .callout { margin-top: 8px; font-size: .84rem; color: var(--muted); }
   .callout b { color: var(--warn); }
+  .scn { margin: 0; font-size: .95rem; color: var(--ink); line-height: 1.6; }
+  .scn b { color: var(--accent-fg); }
+  .sent-flag { color: var(--good); font-weight: 700; font-size: .92rem; }
   .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
   @media (max-width: 560px){ .notes { grid-template-columns: 1fr; } }
   .dnote { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px; padding: 11px 13px; }
@@ -418,9 +423,10 @@
   <div class="stepper hidden" id="stepper">
     <div class="step-pip" data-step="1"><div class="bar"></div><div class="lbl">1 &middot; Typing</div></div>
     <div class="step-pip" data-step="2"><div class="bar"></div><div class="lbl">2 &middot; Data entry</div></div>
-    <div class="step-pip" data-step="3"><div class="bar"></div><div class="lbl">3 &middot; Background</div></div>
-    <div class="step-pip" data-step="4"><div class="bar"></div><div class="lbl">4 &middot; Best fit</div></div>
-    <div class="step-pip" data-step="5"><div class="bar"></div><div class="lbl">5 &middot; Review</div></div>
+    <div class="step-pip" data-step="3"><div class="bar"></div><div class="lbl">3 &middot; Email</div></div>
+    <div class="step-pip" data-step="4"><div class="bar"></div><div class="lbl">4 &middot; Background</div></div>
+    <div class="step-pip" data-step="5"><div class="bar"></div><div class="lbl">5 &middot; Best fit</div></div>
+    <div class="step-pip" data-step="6"><div class="bar"></div><div class="lbl">6 &middot; Review</div></div>
   </div>
 
   <main class="card">
@@ -482,6 +488,7 @@
       <div class="actions">
         <button class="btn btn--ghost" id="resetType">Reset</button>
         <div class="spacer"></div>
+        <button class="btn btn--ghost js-skip" data-skip="data" type="button">Skip</button>
         <button class="btn btn--primary" id="toStep2" disabled>Continue &rarr;</button>
       </div>
     </section>
@@ -502,7 +509,7 @@
           <li><b>Enter the loads.</b> <span class="s2">Read each dispatch note below and type its details into a new row under the headings &mdash; <b>one load per row</b>. Put each value in the matching column.</span></li>
           <li><b>Save the file with your name.</b> <span class="s2">Save it as an Excel file (<code>.xlsx</code>). In Excel: <b>File &rarr; Save As</b>, choose <b>Excel Workbook (*.xlsx)</b>, and name it:</span>
             <div class="headings">Your Full Name - Data Entry.xlsx</div>
-            <div class="callout">Example: <code>Ali Raza - Data Entry.xlsx</code>. <b>Tip:</b> save it to the <b>Desktop</b> so it&rsquo;s easy to find in the next step.</div>
+            <div class="callout">Example: <code>Sam Harris - Data Entry.xlsx</code>. <b>Tip:</b> save it to the <b>Desktop</b> so it&rsquo;s easy to find in the next step.</div>
           </li>
           <li><b>Upload it here.</b> <span class="s2">Come back to this page and use <b>Attach Excel file</b> below to select the file you just saved.</span></li>
         </ol>
@@ -539,13 +546,58 @@
       <div class="actions">
         <button class="btn btn--ghost" data-back="s-type">&larr; Back</button>
         <div class="spacer"></div>
+        <button class="btn btn--ghost js-skip" data-skip="email" type="button">Skip</button>
         <button class="btn btn--primary" id="toBg" disabled>Continue &rarr;</button>
       </div>
     </section>
 
-    <!-- STEP 3: BACKGROUND -->
+    <!-- STEP 3: EMAIL WRITING -->
+    <section class="screen" id="s-email">
+      <div class="eyebrow"><span class="n">3</span> Email writing</div>
+      <h2 class="q">Win the client over on price.</h2>
+      <p class="lede">A customer thinks our quote is too high. Write a convincing email that justifies the price and gets him to book. We want to see how well you write and persuade.</p>
+
+      <div class="de-block">
+        <div class="de-h">The scenario</div>
+        <p class="scn">A repeat customer, <b>Sam</b>, asked us to move an excavator (an over-dimensional load) from <b>Houston, TX to Denver, CO</b>. You quoted <b>$5,235</b> &mdash; that covers the line-haul, fuel, the oversize permit, and a pilot car. Sam just replied that another carrier offered <b>$4,400</b>, and he&rsquo;s thinking of going with them.<br><br>Your job: write an email to Sam that convinces him the Badass Logistics price is worth it, and asks him to book with us.</p>
+      </div>
+
+      <div class="de-block">
+        <div class="de-h">How to do this</div>
+        <ol class="steps">
+          <li><b>Open Google Chrome</b> <span class="s2">on this computer.</span></li>
+          <li><b>Open Gmail.</b> <span class="s2">It is already signed in as <code>badasslogistics@gmail.com</code>.</span></li>
+          <li><b>Click Compose</b> <span class="s2">and send the email to <code>info@badasslogistics.com</code> &mdash; this is where we receive and review it.</span></li>
+          <li><b>Write a clear subject line</b> <span class="s2">and a convincing message. Address the customer as <b>Sam</b>, justify the price, and ask for the booking.</span></li>
+          <li><b>Sign off with a signature.</b> <span class="s2">On the last lines, write <code>Regards,</code> then <b>your name</b> and <b>your email</b> (type the signature yourself).</span></li>
+          <li><b>Click Send</b> <span class="s2">in Gmail, then come back to this page.</span></li>
+          <li><b>Paste a copy below</b> <span class="s2">(recommended), then click <b>I&rsquo;ve sent the email</b>.</span></li>
+        </ol>
+        <div class="callout">You may use the <b>Claude chatbot</b> to help you draft it &mdash; we just want to see how well you write and make the case.</div>
+      </div>
+
+      <div class="de-block">
+        <div class="de-h">Paste a copy of your email <span class="opt">(recommended)</span></div>
+        <div class="field"><label for="emSubject">Subject line</label><input type="text" id="emSubject"></div>
+        <div class="field" style="margin-top:12px"><label for="emBody">Email body</label><textarea id="emBody" style="min-height:150px"></textarea></div>
+      </div>
+
+      <div class="de-block" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button class="btn btn--primary" id="markSent" type="button">I&rsquo;ve sent the email &#10003;</button>
+        <span id="sentFlag" class="sent-flag" hidden>&#10003; Marked as sent &mdash; you can continue.</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn--ghost" data-back="s-data">&larr; Back</button>
+        <div class="spacer"></div>
+        <button class="btn btn--ghost js-skip" data-skip="bg" type="button">Skip</button>
+        <button class="btn btn--primary" id="toBg2" disabled>Continue &rarr;</button>
+      </div>
+    </section>
+
+    <!-- STEP 4: BACKGROUND -->
     <section class="screen" id="s-bg">
-      <div class="eyebrow"><span class="n">3</span> Background</div>
+      <div class="eyebrow"><span class="n">4</span> Background</div>
       <h2 class="q">Tell us about your background.</h2>
       <p class="lede">In a paragraph, summarize your educational and professional background: where you studied, the roles you&rsquo;ve held, and the skills you bring.</p>
       <div class="field">
@@ -557,15 +609,16 @@
         </div>
       </div>
       <div class="actions">
-        <button class="btn btn--ghost" data-back="s-data">&larr; Back</button>
+        <button class="btn btn--ghost" data-back="s-email">&larr; Back</button>
         <div class="spacer"></div>
+        <button class="btn btn--ghost js-skip" data-skip="fit" type="button">Skip</button>
         <button class="btn btn--primary" id="toStep3" disabled>Continue &rarr;</button>
       </div>
     </section>
 
     <!-- STEP 3: BEST FIT -->
     <section class="screen" id="s-fit">
-      <div class="eyebrow"><span class="n">4</span> Best fit</div>
+      <div class="eyebrow"><span class="n">5</span> Best fit</div>
       <h2 class="q">Why are you the best fit for this role at BDS Corp?</h2>
       <p class="lede">In a paragraph, tell us why you&rsquo;re the right person for the position you applied for: what makes you stand out and what you&rsquo;d bring to BDS Corp.</p>
       <div class="field">
@@ -579,13 +632,14 @@
       <div class="actions">
         <button class="btn btn--ghost" data-back="s-bg">&larr; Back</button>
         <div class="spacer"></div>
+        <button class="btn btn--ghost js-skip" data-skip="review" type="button">Skip</button>
         <button class="btn btn--primary" id="toReview" disabled>Review &rarr;</button>
       </div>
     </section>
 
     <!-- STEP 4: REVIEW -->
     <section class="screen" id="s-review">
-      <div class="eyebrow"><span class="n">5</span> Review</div>
+      <div class="eyebrow"><span class="n">6</span> Review</div>
       <h2 class="q">Review your answers.</h2>
       <p class="lede">Please review your answers, then let the BDS Corp hiring manager know you have finished.</p>
       <div class="report" id="report"></div>
@@ -618,20 +672,21 @@
     wpm: 0, accuracy: 100, seconds: 0, errors: 0, typingDone: false,
     bg: "", fit: "",
     dataFile: null, // { name, size, data(base64) } from the Excel upload
-    // per-section start/end timestamps (ms). s1 = typing, sd = data entry, s2 = background, s3 = best fit.
-    t: { begin: 0, s1Start: 0, s1End: 0, sdStart: 0, sdEnd: 0, s2Start: 0, s2End: 0, s3Start: 0, s3End: 0, review: 0 }
+    emailDone: false, emailSubject: "", emailBody: "",
+    // per-section start/end timestamps (ms). s1 typing, sd data entry, se email, s2 background, s3 best fit.
+    t: { begin: 0, s1Start: 0, s1End: 0, sdStart: 0, sdEnd: 0, seStart: 0, seEnd: 0, s2Start: 0, s2End: 0, s3Start: 0, s3End: 0, review: 0 }
   };
 
   function stamp(key) { if (!state.t[key]) state.t[key] = Date.now(); }
   function restamp(key) { state.t[key] = Date.now(); }
 
-  var screens = ["s-start", "s-type", "s-data", "s-bg", "s-fit", "s-review"];
+  var screens = ["s-start", "s-type", "s-data", "s-email", "s-bg", "s-fit", "s-review"];
   function show(id) {
     screens.forEach(function (s) {
       document.getElementById(s).classList.toggle("active", s === id);
     });
     var stepper = document.getElementById("stepper");
-    var stepIndex = { "s-type": 1, "s-data": 2, "s-bg": 3, "s-fit": 4, "s-review": 5 }[id] || 0;
+    var stepIndex = { "s-type": 1, "s-data": 2, "s-email": 3, "s-bg": 4, "s-fit": 5, "s-review": 6 }[id] || 0;
     stepper.classList.toggle("hidden", stepIndex === 0);
     document.querySelectorAll(".step-pip").forEach(function (p) {
       var n = +p.getAttribute("data-step");
@@ -793,9 +848,8 @@
     if (e.key === "Enter") e.preventDefault();
   });
   document.getElementById("resetType").addEventListener("click", resetTyping);
-  toStep2.addEventListener("click", function () {
-    show("s-data"); stamp("sdStart");
-  });
+  function goData() { show("s-data"); stamp("sdStart"); }
+  toStep2.addEventListener("click", goData);
 
   /* ---------- Data entry (Excel upload) ---------- */
   var toBg = document.getElementById("toBg");
@@ -823,10 +877,24 @@
     upHas.hidden = true; upDrop.hidden = false;
     toBg.disabled = true;
   });
-  toBg.addEventListener("click", function () {
-    restamp("sdEnd");
-    show("s-bg"); document.getElementById("bgText").focus();
+  function goEmail() { restamp("sdEnd"); show("s-email"); stamp("seStart"); }
+  toBg.addEventListener("click", goEmail);
+
+  /* ---------- Email writing ---------- */
+  var toBg2 = document.getElementById("toBg2");
+  document.getElementById("markSent").addEventListener("click", function () {
+    state.emailDone = true;
+    document.getElementById("sentFlag").hidden = false;
+    this.disabled = true; this.textContent = "Email marked as sent";
+    toBg2.disabled = false;
   });
+  function goBgFromEmail() {
+    state.emailSubject = document.getElementById("emSubject").value.trim();
+    state.emailBody = document.getElementById("emBody").value.trim();
+    restamp("seEnd");
+    show("s-bg"); document.getElementById("bgText").focus();
+  }
+  toBg2.addEventListener("click", goBgFromEmail);
 
   /* ---------- Paragraphs ---------- */
   var MAX_WORDS = 200;
@@ -867,18 +935,26 @@
   document.querySelectorAll("[data-back]").forEach(function (b) {
     b.addEventListener("click", function () { show(b.getAttribute("data-back")); });
   });
-  toStep3.addEventListener("click", function () {
+  function goFit() {
     restamp("s2End"); // background finished
     state.bg = bg.ta.value.trim();
     show("s-fit"); document.getElementById("fitText").focus();
-  });
-  toReview.addEventListener("click", function () {
+  }
+  function goReview() {
     restamp("s3End"); // best-fit finished
     restamp("review");
     state.bg = bg.ta.value.trim();
     state.fit = fit.ta.value.trim();
     buildReport();
     show("s-review");
+  }
+  toStep3.addEventListener("click", goFit);
+  toReview.addEventListener("click", goReview);
+
+  // Skip buttons: let a candidate move through without completing (e.g. to preview the whole test).
+  document.querySelectorAll(".js-skip").forEach(function (b) {
+    var fn = { data: goData, email: goEmail, bg: goBgFromEmail, fit: goFit, review: goReview }[b.getAttribute("data-skip")];
+    if (fn) b.addEventListener("click", fn);
   });
 
   /* ---------- Review ---------- */
@@ -931,11 +1007,17 @@
         timingHtml(state.t.sdStart, state.t.sdEnd) +
         '<div class="prose' + (state.dataFile ? '' : ' empty') + '">' +
         (state.dataFile ? ('&#128196; ' + esc(state.dataFile.name) + ' (' + humanSize(state.dataFile.size) + ') &mdash; attached') : "No file uploaded.") + '</div></div>' +
-      '<div class="row"><h3>Section 3 &middot; Background</h3>' +
+      '<div class="row"><h3>Section 3 &middot; Email writing (sales)</h3>' +
+        timingHtml(state.t.seStart, state.t.seEnd) +
+        '<div class="chips"><span class="chip ' + (state.emailDone ? 'good' : '') + '">' + (state.emailDone ? 'Marked as sent' : 'Not marked sent') + '</span></div>' +
+        (state.emailSubject ? '<div class="prose" style="margin-top:8px"><b>Subject:</b> ' + esc(state.emailSubject) + '</div>' : '') +
+        (state.emailBody ? '<div class="prose" style="margin-top:6px">' + esc(state.emailBody) + '</div>' : '') +
+      '</div>' +
+      '<div class="row"><h3>Section 4 &middot; Background</h3>' +
         timingHtml(state.t.s2Start, state.t.s2End) +
         '<div class="prose' + (state.bg ? '' : ' empty') + '">' +
         (state.bg ? esc(state.bg) : "No answer provided.") + '</div></div>' +
-      '<div class="row"><h3>Section 4 &middot; Why they&rsquo;re the best fit</h3>' +
+      '<div class="row"><h3>Section 5 &middot; Why they&rsquo;re the best fit</h3>' +
         timingHtml(state.t.s3Start, state.t.s3End) +
         '<div class="prose' + (state.fit ? '' : ' empty') + '">' +
         (state.fit ? esc(state.fit) : "No answer provided.") + '</div></div>';
@@ -956,7 +1038,8 @@
       wpm: state.wpm, accuracy: state.accuracy,
       total: fmtDur(state.t.s1End - state.t.s1Start),
       bg: state.bg, fit: state.fit,
-      dataFile: state.dataFile ? { name: state.dataFile.name, size: state.dataFile.size, data: state.dataFile.data } : null
+      dataFile: state.dataFile ? { name: state.dataFile.name, size: state.dataFile.size, data: state.dataFile.data } : null,
+      emailDone: state.emailDone, emailSubject: state.emailSubject, emailBody: state.emailBody
     };
     try {
       var list = JSON.parse(localStorage.getItem("bds_assessments_v1") || "null") || [];
@@ -994,14 +1077,23 @@
       "  Time taken: " + fmtDur(t.sdEnd - t.sdStart),
       "  File:       " + (state.dataFile ? state.dataFile.name : "(no file uploaded)"),
       "",
-      "SECTION 3 - EDUCATIONAL & PROFESSIONAL BACKGROUND",
+      "SECTION 3 - EMAIL WRITING (SALES)",
+      "  Started:    " + clockStr(t.seStart),
+      "  Ended:      " + clockStr(t.seEnd),
+      "  Time taken: " + fmtDur(t.seEnd - t.seStart),
+      "  Status:     " + (state.emailDone ? "Marked as sent" : "Not marked sent"),
+      "  Subject:    " + (state.emailSubject || "(not provided)"),
+      "",
+      (state.emailBody || "(email body not pasted)"),
+      "",
+      "SECTION 4 - EDUCATIONAL & PROFESSIONAL BACKGROUND",
       "  Started:    " + clockStr(t.s2Start),
       "  Ended:      " + clockStr(t.s2End),
       "  Time taken: " + fmtDur(t.s2End - t.s2Start),
       "",
       state.bg || "(no answer)",
       "",
-      "SECTION 4 - WHY THEY ARE THE BEST FIT FOR THE ROLE",
+      "SECTION 5 - WHY THEY ARE THE BEST FIT FOR THE ROLE",
       "  Started:    " + clockStr(t.s3Start),
       "  Ended:      " + clockStr(t.s3End),
       "  Time taken: " + fmtDur(t.s3End - t.s3Start),

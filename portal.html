@@ -982,6 +982,10 @@
           dkv("Total time", c.total) + dkv("Position", esc(c.position)) +
           (c.dataFile ? dkv("Data entry file", esc(c.dataFile.name)) : "") +
         '</div>' +
+        (c.emailDone || c.emailSubject || c.emailBody ?
+          '<div class="ans"><h4>Email writing (sales)' + (c.emailDone ? ' &middot; marked sent' : '') + '</h4>' +
+          (c.emailSubject ? '<p><b>Subject:</b> ' + esc(c.emailSubject) + '</p>' : '') +
+          '<p>' + esc(c.emailBody || "(email body not pasted &mdash; check the info@ inbox)") + '</p></div>' : '') +
         '<div class="ans"><h4>Background</h4><p>' + esc(c.bg) + '</p></div>' +
         '<div class="ans"><h4>Why they&rsquo;re the best fit</h4><p>' + esc(c.fit) + '</p></div>' +
         '<div class="detail-actions"><button class="btn btn--ghost sm" data-dlid="' + c.id + '">Download results</button>' +
