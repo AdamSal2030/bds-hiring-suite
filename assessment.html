@@ -386,6 +386,11 @@
   .headings .pipe { color: var(--hint); margin: 0 8px; }
   .callout { margin-top: 8px; font-size: .84rem; color: var(--muted); }
   .callout b { color: var(--warn); }
+  .tips { list-style: none; margin: 0; padding: 0; }
+  .tips > li { position: relative; padding: 0 0 10px 22px; font-size: .93rem; color: var(--muted); line-height: 1.5; }
+  .tips > li:last-child { padding-bottom: 0; }
+  .tips > li::before { content: ""; position: absolute; left: 3px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .tips b { color: var(--ink); }
   .scn { margin: 0; font-size: .95rem; color: var(--ink); line-height: 1.6; }
   .scn b { color: var(--accent-fg); }
   .sent-flag { color: var(--good); font-weight: 700; font-size: .92rem; }
@@ -560,8 +565,8 @@
     <!-- STEP 3: EMAIL WRITING -->
     <section class="screen" id="s-email">
       <div class="eyebrow"><span class="n">3</span> Email writing</div>
-      <h2 class="q">Win the client over on price.</h2>
-      <p class="lede">A customer thinks our quote is too high. Write a convincing email that justifies the price and gets him to book. We want to see how well you write and persuade.</p>
+      <h2 class="q">Win the client over.</h2>
+      <p class="lede">Pick one of the scenarios below, then write an email to the customer (Sam) that wins him over and gets him to book with us. We want to see how clearly you write and how well you persuade.</p>
 
       <div class="de-block">
         <div class="de-h">The scenario</div>
@@ -576,6 +581,18 @@
         <p class="scn" id="scn3" hidden>A repeat customer, <b>Sam</b>, is upset. His last load with us arrived a day late because of a permit hold-up, and now he is thinking about using a different company for his next job.<br><br>Your job: write an email to Sam that owns the mistake, rebuilds his trust, and convinces him to give Badass Logistics his next load.</p>
         <p class="scn" id="scn4" hidden>Sam asked us for a price to move a <b>bulldozer</b> from <b>Dallas, TX to Kansas City, MO</b> (about 550 miles). After checking the route, the fair all-in rate is <b>$4,850</b>, which covers the truck, fuel, the oversize permits, and a pilot car. Sam has hinted he wants the lowest number possible.<br><br>Your job: write an email to Sam that gives him the <b>$4,850</b> price clearly and confidently, breaks down what is included so the number makes sense, convinces him it is worth it, and asks him to book with Badass Logistics.</p>
         <p class="scn-note">New to logistics? Pick <b>Scenario 2</b>. It needs no special knowledge, and we are looking at how clearly and convincingly you write, whichever scenario you choose.</p>
+      </div>
+
+      <div class="de-block">
+        <div class="de-h">How to make your case</div>
+        <ul class="tips">
+          <li><b>Greet Sam by name</b> and thank him for the opportunity. A warm, professional opening sets the tone.</li>
+          <li><b>State the price plainly and with confidence.</b> Do not apologize for it or bury it at the bottom of the email.</li>
+          <li><b>Show what the price includes</b> so the number makes sense: the truck, the permits, the pilot car, insurance, and on-time delivery.</li>
+          <li><b>Answer the objection.</b> If another carrier is cheaper, explain what can go wrong with a cut-rate move (delays, hidden fees, damaged equipment) without bad-mouthing anyone.</li>
+          <li><b>Keep it short and easy to read.</b> Simple sentences, no jargon, a few short paragraphs.</li>
+          <li><b>Finish with a clear ask.</b> Invite Sam to book and make the next step easy, for example: reply to confirm and we will lock in the date.</li>
+        </ul>
       </div>
 
       <div class="de-block">
