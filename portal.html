@@ -1604,7 +1604,7 @@
 
     var payroll = emps.reduce(function(s,e){ return s + salaryNum(e.salary); }, 0);
     var onboarded = emps.filter(function(e){ return e.cnic || e.bankAccount || e.salary; }).length;
-    var st = '<span class="ap-stat" style="cursor:default"><b>' + emps.length + '</b> employees</span>';
+    var st = '<span class="ap-stat" style="cursor:default"><b>' + emps.length + '</b> ' + (emps.length === 1 ? 'employee' : 'employees') + '</span>';
     if (payroll) st += '<span class="ap-stat" style="cursor:default"><b>PKR ' +fmtMoney(payroll) + '</b> monthly basic</span>';
     st += '<span class="ap-stat" style="cursor:default"><b>' + onboarded + '/' + emps.length + '</b> onboarded</span>';
     document.getElementById("empStats").innerHTML = st;
