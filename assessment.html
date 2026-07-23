@@ -1,9 +1,9 @@
-<title>BDS Corp &mdash; Candidate Assessment</title>
+<title>BDS Corp - Candidate Assessment</title>
 <script>
   (function(){ try { var t = localStorage.getItem("bds_theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch(e){} })();
 </script>
 <style>
-  /* BDS Corp brand — navy + lime. Dark is default; light theme via [data-theme="light"]. */
+  /* BDS Corp brand: navy + lime. Dark is default; light theme via [data-theme="light"]. */
   :root {
     --paper: #121c46;
     --ground: #0a1030;
@@ -246,6 +246,12 @@
   .btn--ghost { background: transparent; color: var(--muted); border-color: var(--line-strong); }
   .btn--ghost:hover { color: var(--ink); border-color: var(--faint); }
   .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+  .scn-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .scn-tab { padding: 7px 13px; font-size: .82rem; border-radius: 9px; cursor: pointer;
+    background: transparent; color: var(--muted); border: 1px solid var(--line-strong); font-weight: 600; }
+  .scn-tab:hover { color: var(--ink); }
+  .scn-tab.is-on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .scn-note { font-size: .86rem; color: var(--muted); margin: 12px 0 0; }
 
   .note {
     display: flex; gap: 10px;
@@ -503,10 +509,10 @@
         <div class="de-h">How to do this</div>
         <ol class="steps">
           <li><b>Open a new spreadsheet.</b> <span class="s2">On this computer, open <b>Microsoft Excel</b> (or Google Sheets) and start a <b>blank workbook</b>.</span></li>
-          <li><b>Type the column headings in row&nbsp;1.</b> <span class="s2">In the very first row, type these exact headings &mdash; one per column, left to right:</span>
+          <li><b>Type the column headings in row&nbsp;1.</b> <span class="s2">In the very first row, type these exact headings, one per column, left to right:</span>
             <div class="headings">Load #<span class="pipe">|</span>Origin<span class="pipe">|</span>Destination<span class="pipe">|</span>Equipment<span class="pipe">|</span>Weight (lbs)<span class="pipe">|</span>Miles<span class="pipe">|</span>Rate/mi</div>
           </li>
-          <li><b>Enter the loads.</b> <span class="s2">Read each dispatch note below and type its details into a new row under the headings &mdash; <b>one load per row</b>. Put each value in the matching column.</span></li>
+          <li><b>Enter the loads.</b> <span class="s2">Read each dispatch note below and type its details into a new row under the headings, <b>one load per row</b>. Put each value in the matching column.</span></li>
           <li><b>Save the file with your name.</b> <span class="s2">Save it as an Excel file (<code>.xlsx</code>). In Excel: <b>File &rarr; Save As</b>, choose <b>Excel Workbook (*.xlsx)</b>, and name it:</span>
             <div class="headings">Your Full Name - Data Entry.xlsx</div>
             <div class="callout">Example: <code>Sam Harris - Data Entry.xlsx</code>. <b>Tip:</b> save it to the <b>Desktop</b> so it&rsquo;s easy to find in the next step.</div>
@@ -516,11 +522,11 @@
       </div>
 
       <div class="de-block">
-        <div class="de-h">Source &mdash; mixed dispatch notes</div>
+        <div class="de-h">Source: mixed dispatch notes</div>
         <div class="notes">
-          <div class="dnote"><div class="dnote-tag">Email</div><div class="dnote-body">Load BL-4471 &mdash; need a flatbed out of Houston, TX headed to Denver, CO. Shipper says it weighs about 44,000 lbs. Run is roughly 1,032 miles, rate locked at $3.85/mile.</div></div>
+          <div class="dnote"><div class="dnote-tag">Email</div><div class="dnote-body">Load BL-4471: need a flatbed out of Houston, TX headed to Denver, CO. Shipper says it weighs about 44,000 lbs. Run is roughly 1,032 miles, rate locked at $3.85/mile.</div></div>
           <div class="dnote"><div class="dnote-tag">Text message</div><div class="dnote-body">BL-4472 / Laredo TX &rsaquo; Phoenix AZ / step-deck / 38,500 lbs / 934 mi / rate 4.10</div></div>
-          <div class="dnote"><div class="dnote-tag">Broker call &mdash; note</div><div class="dnote-body">Lowboy (RGN), 62,000 lbs, moving from Gary, IN over to Tulsa, OK. 612 miles, they&rsquo;re paying 5.25 a mile. Ref BL-4473.</div></div>
+          <div class="dnote"><div class="dnote-tag">Broker call</div><div class="dnote-body">Lowboy (RGN), 62,000 lbs, moving from Gary, IN over to Tulsa, OK. 612 miles, they&rsquo;re paying 5.25 a mile. Ref BL-4473.</div></div>
           <div class="dnote"><div class="dnote-tag">Load ticket</div><div class="dnote-body">Load #: BL-4474 &nbsp;&middot;&nbsp; Equip: Flatbed &nbsp;&middot;&nbsp; Origin: Mobile, AL &nbsp;&middot;&nbsp; Dest: Savannah, GA &nbsp;&middot;&nbsp; 47,200 lbs &nbsp;&middot;&nbsp; 465 miles &nbsp;&middot;&nbsp; $3.60/mi</div></div>
         </div>
       </div>
@@ -559,7 +565,13 @@
 
       <div class="de-block">
         <div class="de-h">The scenario</div>
-        <p class="scn">A repeat customer, <b>Sam</b>, asked us to move an excavator (an over-dimensional load) from <b>Houston, TX to Denver, CO</b>. You quoted <b>$5,235</b> &mdash; that covers the line-haul, fuel, the oversize permit, and a pilot car. Sam just replied that another carrier offered <b>$4,400</b>, and he&rsquo;s thinking of going with them.<br><br>Your job: write an email to Sam that convinces him the Badass Logistics price is worth it, and asks him to book with us.</p>
+        <div class="scn-tabs">
+          <button class="scn-tab is-on" data-scn="1" type="button">Scenario 1 &middot; Freight pricing</button>
+          <button class="scn-tab" data-scn="2" type="button">Scenario 2 &middot; Simple version</button>
+        </div>
+        <p class="scn" id="scn1">A repeat customer, <b>Sam</b>, asked us to move an excavator (an over-dimensional load) from <b>Houston, TX to Denver, CO</b>. You quoted <b>$5,235</b>, and that covers the line-haul, fuel, the oversize permit, and a pilot car. Sam just replied that another carrier offered <b>$4,400</b>, and he&rsquo;s thinking of going with them.<br><br>Your job: write an email to Sam that convinces him the Badass Logistics price is worth it, and asks him to book with us.</p>
+        <p class="scn" id="scn2" hidden>A customer named <b>Sam</b> wants us to move a large, heavy machine to another city. Another company offered to do the same move for less money, so Sam is not sure who to go with. You do not need any special knowledge for this one.<br><br>Your job: in your own words, write a friendly email to Sam explaining why paying a little more for a careful, fully-insured, on-time service is the safer choice, and politely ask him to book with us.</p>
+        <p class="scn-note">New to logistics? Pick <b>Scenario 2</b>. It needs no special knowledge, and we are looking at how clearly and convincingly you write either way.</p>
       </div>
 
       <div class="de-block">
@@ -567,13 +579,13 @@
         <ol class="steps">
           <li><b>Open Google Chrome</b> <span class="s2">on this computer.</span></li>
           <li><b>Open Gmail.</b> <span class="s2">It is already signed in as <code>badasslogistics@gmail.com</code>.</span></li>
-          <li><b>Click Compose</b> <span class="s2">and send the email to <code>info@badasslogistics.com</code> &mdash; this is where we receive and review it.</span></li>
+          <li><b>Click Compose</b> <span class="s2">and send the email to <code>info@badasslogistics.com</code>. This is where we receive and review it.</span></li>
           <li><b>Write a clear subject line</b> <span class="s2">and a convincing message. Address the customer as <b>Sam</b>, justify the price, and ask for the booking.</span></li>
           <li><b>Sign off with a signature.</b> <span class="s2">On the last lines, write <code>Regards,</code> then <b>your name</b> and <b>your email</b> (type the signature yourself).</span></li>
           <li><b>Click Send</b> <span class="s2">in Gmail, then come back to this page.</span></li>
           <li><b>Paste a copy below</b> <span class="s2">(recommended), then click <b>I&rsquo;ve sent the email</b>.</span></li>
         </ol>
-        <div class="callout">You may use the <b>Claude chatbot</b> to help you draft it &mdash; we just want to see how well you write and make the case.</div>
+        <div class="callout">You may use the <b>Claude chatbot</b> to help you draft it. We just want to see how well you write and make the case.</div>
       </div>
 
       <div class="de-block">
@@ -584,7 +596,7 @@
 
       <div class="de-block" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
         <button class="btn btn--primary" id="markSent" type="button">I&rsquo;ve sent the email &#10003;</button>
-        <span id="sentFlag" class="sent-flag" hidden>&#10003; Marked as sent &mdash; you can continue.</span>
+        <span id="sentFlag" class="sent-flag" hidden>&#10003; Marked as sent. You can continue.</span>
       </div>
 
       <div class="actions">
@@ -672,7 +684,7 @@
     wpm: 0, accuracy: 100, seconds: 0, errors: 0, typingDone: false,
     bg: "", fit: "",
     dataFile: null, // { name, size, data(base64) } from the Excel upload
-    emailDone: false, emailSubject: "", emailBody: "",
+    emailDone: false, emailSubject: "", emailBody: "", emailScenario: 1,
     // per-section start/end timestamps (ms). s1 typing, sd data entry, se email, s2 background, s3 best fit.
     t: { begin: 0, s1Start: 0, s1End: 0, sdStart: 0, sdEnd: 0, seStart: 0, seEnd: 0, s2Start: 0, s2End: 0, s3Start: 0, s3End: 0, review: 0 }
   };
@@ -731,7 +743,7 @@
     state.email = cEmail.value.trim() || "Not provided";
     restamp("begin");
     show("s-type");
-    // The typing clock does NOT start here — it starts only when the candidate clicks Start,
+    // The typing clock does NOT start here. It starts only when the candidate clicks Start,
     // so they can read the instructions and passage first.
     document.getElementById("startType").focus();
   });
@@ -882,11 +894,23 @@
 
   /* ---------- Email writing ---------- */
   var toBg2 = document.getElementById("toBg2");
+  // Scenario switch (freight pricing vs. simple version)
+  document.querySelectorAll(".scn-tab").forEach(function (t) {
+    t.addEventListener("click", function () {
+      var n = t.getAttribute("data-scn");
+      state.emailScenario = parseInt(n, 10);
+      document.querySelectorAll(".scn-tab").forEach(function (x) { x.classList.toggle("is-on", x === t); });
+      document.getElementById("scn1").hidden = (n !== "1");
+      document.getElementById("scn2").hidden = (n !== "2");
+    });
+  });
   document.getElementById("markSent").addEventListener("click", function () {
-    state.emailDone = true;
-    document.getElementById("sentFlag").hidden = false;
-    this.disabled = true; this.textContent = "Email marked as sent";
-    toBg2.disabled = false;
+    state.emailDone = !state.emailDone;
+    document.getElementById("sentFlag").hidden = !state.emailDone;
+    toBg2.disabled = !state.emailDone;
+    this.textContent = state.emailDone ? "Undo (not sent yet)" : "I\u2019ve sent the email \u2713";
+    this.classList.toggle("btn--ghost", state.emailDone);
+    this.classList.toggle("btn--primary", !state.emailDone);
   });
   function goBgFromEmail() {
     state.emailSubject = document.getElementById("emSubject").value.trim();
@@ -1006,10 +1030,10 @@
       '<div class="row"><h3>Section 2 &middot; Data entry (Excel)</h3>' +
         timingHtml(state.t.sdStart, state.t.sdEnd) +
         '<div class="prose' + (state.dataFile ? '' : ' empty') + '">' +
-        (state.dataFile ? ('&#128196; ' + esc(state.dataFile.name) + ' (' + humanSize(state.dataFile.size) + ') &mdash; attached') : "No file uploaded.") + '</div></div>' +
+        (state.dataFile ? ('&#128196; ' + esc(state.dataFile.name) + ' (' + humanSize(state.dataFile.size) + ') attached') : "No file uploaded.") + '</div></div>' +
       '<div class="row"><h3>Section 3 &middot; Email writing (sales)</h3>' +
         timingHtml(state.t.seStart, state.t.seEnd) +
-        '<div class="chips"><span class="chip ' + (state.emailDone ? 'good' : '') + '">' + (state.emailDone ? 'Marked as sent' : 'Not marked sent') + '</span></div>' +
+        '<div class="chips"><span class="chip">Scenario ' + (state.emailScenario === 2 ? '2 (simple)' : '1 (freight pricing)') + '</span><span class="chip ' + (state.emailDone ? 'good' : '') + '">' + (state.emailDone ? 'Marked as sent' : 'Not marked sent') + '</span></div>' +
         (state.emailSubject ? '<div class="prose" style="margin-top:8px"><b>Subject:</b> ' + esc(state.emailSubject) + '</div>' : '') +
         (state.emailBody ? '<div class="prose" style="margin-top:6px">' + esc(state.emailBody) + '</div>' : '') +
       '</div>' +
@@ -1039,7 +1063,8 @@
       total: fmtDur(state.t.s1End - state.t.s1Start),
       bg: state.bg, fit: state.fit,
       dataFile: state.dataFile ? { name: state.dataFile.name, size: state.dataFile.size, data: state.dataFile.data } : null,
-      emailDone: state.emailDone, emailSubject: state.emailSubject, emailBody: state.emailBody
+      emailDone: state.emailDone, emailSubject: state.emailSubject, emailBody: state.emailBody,
+      emailScenario: state.emailScenario
     };
     try {
       var list = JSON.parse(localStorage.getItem("bds_assessments_v1") || "null") || [];
@@ -1081,6 +1106,7 @@
       "  Started:    " + clockStr(t.seStart),
       "  Ended:      " + clockStr(t.seEnd),
       "  Time taken: " + fmtDur(t.seEnd - t.seStart),
+      "  Scenario:   " + (state.emailScenario === 2 ? "2 (simple version)" : "1 (freight pricing)"),
       "  Status:     " + (state.emailDone ? "Marked as sent" : "Not marked sent"),
       "  Subject:    " + (state.emailSubject || "(not provided)"),
       "",
